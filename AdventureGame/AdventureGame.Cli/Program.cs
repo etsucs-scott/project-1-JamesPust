@@ -5,9 +5,13 @@ namespace AdventureGame.Cli
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
-            Console.WriteLine("working") ;
-            //This is a working github clone of project1
+            Console.CursorVisible = false; //not having the cursor visible makes for a cleaner look
+            var randy = new Random();
+
+            int rows = 21;
+            int cols = 31;
+
+            
         }
        
     }
