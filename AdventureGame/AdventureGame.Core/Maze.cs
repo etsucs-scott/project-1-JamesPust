@@ -35,13 +35,40 @@
             int[] drow = new int[] { -2, 2, 0, 0 }; //makes the path that the hero can walk
             int[] dcol = new int[] { 0, 0, -2, 2 };
             
+            while (stack.Count > 0)
+            {
+                var (row, col) = stack.Pop();
+                var neighbors = new List<(int nrow, int ncol, int dir)>();
+                for (int i = 0; i < 4; i++)
+                {
+                    int nrow = row + drow[i];
+                    int ncol = col + dcol[i];
+                    if (nrow > 0 && nrow < Rows - 1 && ncol < Columns - 1 && Grid[nrow, ncol].IsWall)
+                    {
+                        neighbors.Add((nrow, ncol,i));
+                    }
+                }
+            }
 
         }
 
         public class Tile
         {
             public bool IsWall { get; set; }
+            public Item Item { get; set; }
+            public Monster Monster { get; set; }
+            public bool IsExit { get; set; }
 
+            public Tile(bool isWall = true)
+            {
+                IsWall = isWall;
+                Item = null;
+                Monster = null;
+                IsExit = false;
+            }
+            public bool HasMonster => Monster != null && Monster.IsAlive;
+            public bool HasItem => Item != null;
+            
         }
     }
 }
