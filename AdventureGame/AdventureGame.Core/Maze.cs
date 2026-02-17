@@ -48,8 +48,131 @@
                         neighbors.Add((nrow, ncol,i));
                     }
                 }
+
+                if (neighbors.Count > 0)
+                {
+                    stack.Push((row, col));
+                    neighbors = neighbors.Orderby(_ => randy.Next()).ToList();
+                    var chosen = neighbors[randy.Next(neighbors.Count)];
+                    int nr2 = chosen.nrow, nc2 = chosen.nocol;
+                    int wallRow = row + (nr2 - row) / 2;
+                    int wallCol = col + (nc2 - col) / 2;
+                    Grid[wallRow, wallCol].IsWall = false;
+                    Grid[nr2, nc2].IsWall = false;
+                    stack.Push((nr2, nc2));
+                }
             }
 
+            Start = (1, 1); //This makes the starting position in the top left corner
+            Exit = (Rows - 2, Columns - 2); //this makes the exit in the opposite corner or the bottom right
+            Grid[Start.Item1, Start.Item2].IsWall = false;//makes the start not a wall
+            Grid[Exit.Item1, Exit.Item2].IsWall = false;//makes the exit not a wall
+             Grid[Exit.Item1, Exit.Item2].IsExit = true;//makes the exit a exit
+
+            PlaceEntities();
+            
+            
+
+
+        }
+
+
+        private void PlaceEntities()
+        {
+            var floorCells = new List<(int row, int col)>();
+            for (int r = 1; r < Rows -1; r++)
+            {
+                for (int col = 1; col < Columns - 1; col++)
+                {
+                    if (!Grid[r, col].IsWall && !(r == Start.Item1 && col == StartItem2) && !(r == Exit.Item1 && col == Exit.row)) //check every cell if isWall then places item
+                    {
+                        floorCells.Add((r, col));
+                    }
+                }
+            }
+
+            floorCells = floorCells.OrderBy(_ => randy.Next()).ToList(); //randomizes the maze
+            int total = floorCells.Count;
+            int numMonsters = Math.Max(10, 25);
+            int numWeapons = Math.Max(5, 15);
+            int numPotions = Math.Max(5, 15);
+
+            int index = 0;
+
+            for (int i = 0; i < numMonsters && index < floorCells.Count; i++)
+            {
+                var (row, col) = floorCells[index];
+                int choice = randy.Next(3);
+                Monster m;
+
+                switch (choice)
+                {
+                    case 0:
+                        m = new Monster($"Rat ", 10, 5);
+                        break;
+                    case 1:
+                        m = new Monster($"Goblin ", 15, 5);
+                        break; 
+                    case 2:
+                        m = new Monster($"Wizard ", 20, 20);
+                        break;
+                    case 3:
+                        m = new Monster($"Knight ", 25, 15);
+                        break;
+                    default:
+                        m = new Monster($"Average Joe ", 15, 10);
+                        break;
+                }
+
+                Grid[row, col].Monster = m;
+            }
+            //weapons
+            
+            for (int i = 0; i < numMonsters && index < floorCells.Count; i++, index++)
+            {
+                var (row, col) = floorCells[index] ;
+                int choice = randy.Next(4);
+                Weapon w;
+
+                switch (choice)
+                {
+                    case 0:
+                        w = new Weapon($"Wooden Sword #{i + 1}", 2);
+                        break;
+                    case 1:
+                        w = new Weapon($"Stone Sword #{i + 1}", 5);
+                        break;
+                    case 2:
+                        w = new Weapon($"Iron Sword #{i + 1}", 10);
+                        break;
+                    case 3:
+                        w = new Weapon($"Diamond Sword #{i + 1}", 20);
+                        break;
+                    default;
+                        w = new Weapon($"Gold Sword #{i + 1}", 8);
+                        break;
+                }
+                Grid[row, col].Item = w;
+            }
+
+            for (int k = 0; k < numPotions && index < floorCells.Count; k++, index++)
+            {
+                var (r, c) = florrCells[index];
+                int heal = randy.Next(5 - 50);
+                Grid[r, c].Item = new Potion($"Potion (+{heal})", heal);
+            }
+
+        }
+
+        /// <summary>
+        /// Iq Check( To make sure the path you want to walk is not a wall )
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <returns></returns>
+        public bool IsWalkable(int row, int col)
+        {
+            return row >= 0 && row < row && col < Columns && !Geid[row, col].IsWall;
         }
 
         public class Tile
