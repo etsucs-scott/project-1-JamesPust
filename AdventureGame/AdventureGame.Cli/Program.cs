@@ -22,8 +22,8 @@ namespace AdventureGame.Cli
                 Console.Clear();
                 MakeMaze(maze, player);
                 Console.WriteLine();
-                Console.WriteLine($"HP: {player,Health}    Base Attack: {player.AttackPower}       Best Weapon: {player.TrueAttack - player.AttackPower}            Total Attack Power: {player.TrueAttack}\n");
-                Console.WriteLine($"Inventory: {player.InvSummary()}\n")
+                Console.WriteLine($"HP: {player.Health}    Base Attack: {player.AttackPower}       Best Weapon: {player.TrueAttack - player.AttackPower}            Total Attack Power: {player.TrueAttack}\n");
+                Console.WriteLine($"Inventory: {player.InvSummary()}\n");
                 Console.WriteLine();
                 if(!string.IsNullOrEmpty(introGreeting))
                 {
@@ -36,13 +36,13 @@ namespace AdventureGame.Cli
 
                 if (!player.IsAlive)
                 {
-                    Console.WriteLine("You died!\n")
+                    Console.WriteLine("You died!\n");
                         break;
                 }
                 
-                if (maze.Grid[player.Row, player.Col].isExit)
+                if (maze.Grid[player.Row, player.Col].IsExit)
                 {
-                    Console.WriteLine("You Won! Great Job!\n")
+                    Console.WriteLine("You Won! Great Job!\n");
                         break;
                 }
 
@@ -71,12 +71,12 @@ namespace AdventureGame.Cli
                 }
                 else if (key == ConsoleKey.Q)
                 {
-                    Console.WriteLine("Quitting The Maze\n")
+                    Console.WriteLine("Quitting The Maze\n");
                     break;
                 }
                 else  
                 {
-                    introGreeting = "WASD or Arrow keys to move and Q to quit.\n"
+                    introGreeting = "WASD or Arrow keys to move and Q to quit.\n";
                         continue;
                 }
 
@@ -99,22 +99,22 @@ namespace AdventureGame.Cli
                             {
                                 int playerAttack = player.TrueAttack;//player attacks
                                 monster.TakeDamage(playerAttack);
-                                introGreeting += $"You attacked {monster.Name} for {playerAttack}dmg. {Math.Max(0, monster.Health)} hp left.\n"
+                                introGreeting += $"You attacked {monster.Name} for {playerAttack}dmg. {Math.Max(0, monster.Health)} hp left.\n";
                                 if (monster.IsAlive) break;
 
                                 int monsterAttack = monster.AttackPower;//monster attacks
                                 player.TakeDamage(monsterAttack);
-                                introGreeting += $"{monster.Name} hit you for {monsterAttack}dmg. You have {player.Health}hp left.\n"
+                                introGreeting += $"{monster.Name} hit you for {monsterAttack}dmg. You have {player.Health}hp left.\n";
 
                             }
 
                             if(!player.IsAlive)
                             {
-                                introGreeting += $"You have perished in battle.\n
+                                introGreeting += $"You have perished in battle.\n";
                             }
                             else
                             {
-                                introGreeting += "You have won this battle. Now continue."
+                                introGreeting += $"{monster.Name} has been slain. You have won this battle.";
                                 tile.Monster = null;
                             }
                         }
@@ -124,7 +124,7 @@ namespace AdventureGame.Cli
                         {
                             var item = tile.Item;
                             item.ApplyTo(player);
-                            introGreeting += item.Message + "\n"
+                            introGreeting += item.Message + "\n";
                             tile.Item = null;
                         }
 

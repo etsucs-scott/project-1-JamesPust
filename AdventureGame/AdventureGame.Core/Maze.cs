@@ -12,12 +12,14 @@
 
         public Maze(int rows, int cols)
         {
-            Rows = Math.Max(5, rows | 1);
-            Columns = Math.Max(5, cols | 1);
+            Rows = rows % 2 == 0 ? rows + 1 : rows;
+            Columns = cols % 2 == 0 ? cols + 1 : cols;
+            Rows = Math.Max(5, Rows);
+            Columns = Math.Max(5, Columns);
             Grid = new Tile[Rows, Columns];
             for (int row = 0; row < Rows; row++)
                 for (int col = 0; col < Columns; col++)
-                    Grid[row, col] = new Tile(IsWall: true);
+                    Grid[row, col] = new Tile(true);
 
             GenerateMaze();
 
@@ -30,7 +32,7 @@
             Grid[srow, scol].IsWall = false;
             stack.Push((srow, scol));
 
-            (int row, int col) lastVisited = (srow, scol);
+           // (int row, int col) lastVisited = (srow, scol);
 
             int[] drow = new int[] { -2, 2, 0, 0 }; //makes the path that the hero can walk
             int[] dcol = new int[] { 0, 0, -2, 2 };
@@ -43,7 +45,7 @@
                 {
                     int nrow = row + drow[i];
                     int ncol = col + dcol[i];
-                    if (nrow > 0 && nrow < Rows - 1 && ncol < Columns - 1 && Grid[nrow, ncol].IsWall)
+                    if (nrow > 0 && nrow < Rows - 1 && ncol > 0 && ncol < Columns - 1 && Grid[nrow, ncol].IsWall)
                     {
                         neighbors.Add((nrow, ncol,i));
                     }
@@ -52,9 +54,9 @@
                 if (neighbors.Count > 0)
                 {
                     stack.Push((row, col));
-                    neighbors = neighbors.Orderby(_ => randy.Next()).ToList();
+                    neighbors = neighbors.OrderBy(_ => randy.Next()).ToList();
                     var chosen = neighbors[randy.Next(neighbors.Count)];
-                    int nr2 = chosen.nrow, nc2 = chosen.nocol;
+                    int nr2 = chosen.nrow, nc2 = chosen.ncol;
                     int wallRow = row + (nr2 - row) / 2;
                     int wallCol = col + (nc2 - col) / 2;
                     Grid[wallRow, wallCol].IsWall = false;
@@ -84,7 +86,7 @@
             {
                 for (int col = 1; col < Columns - 1; col++)
                 {
-                    if (!Grid[r, col].IsWall && !(r == Start.Item1 && col == StartItem2) && !(r == Exit.Item1 && col == Exit.row)) //check every cell if isWall then places item
+                    if (!Grid[r, col].IsWall && !(r == Start.Item1 && col == Start.Item2) && !(r == Exit.Item1 && col == Exit.row)) //check every cell if isWall then places item
                     {
                         floorCells.Add((r, col));
                     }
@@ -148,7 +150,7 @@
                     case 3:
                         w = new Weapon($"Diamond Sword #{i + 1}", 20);
                         break;
-                    default;
+                    default:
                         w = new Weapon($"Gold Sword #{i + 1}", 8);
                         break;
                 }
@@ -157,9 +159,9 @@
 
             for (int k = 0; k < numPotions && index < floorCells.Count; k++, index++)
             {
-                var (r, c) = florrCells[index];
+                var (row, col) = floorCells[index];
                 int heal = randy.Next(5 - 50);
-                Grid[r, c].Item = new Potion($"Potion (+{heal})", heal);
+                Grid[row, col].Item = new Potion($"Potion (+{heal})", heal);
             }
 
         }
@@ -172,7 +174,10 @@
         /// <returns></returns>
         public bool IsWalkable(int row, int col)
         {
-            return row >= 0 && row < row && col < Columns && !Geid[row, col].IsWall;
+            if (row < 0 || row >= Rows || col < 0 || col >= Columns)
+                return false;
+
+            return !Grid[row, col].IsWall;
         }
 
         public class Tile

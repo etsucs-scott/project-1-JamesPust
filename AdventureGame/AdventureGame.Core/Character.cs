@@ -49,7 +49,7 @@ namespace AdventureGame.Core
         public void Heal(int amount)
         {
             Health += amount;
-            if (Health > 100)
+            if (Health > 200)
             {
                 Health = 200;
             }

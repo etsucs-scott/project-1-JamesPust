@@ -13,31 +13,20 @@ This repository is intentionally minimal. You are responsible for:
 ---
 
 ## Getting Started (CLI)
-
-You may use **Visual Studio**, **VS Code**, or the **terminal**.
-
-### Create a solution
 ```bash
-dotnet new sln -n ProjectName
+Use WASD to move around. /# are walls and not be walked on. Press Q to quit the game. Reach E the exit to win
+```
+### The Difficulty
+```bash
+The problem is that there are monsters that have different healths and attack power
 ```
 
-### Create a project (example: console app)
+### The Solution
 ```bash
-dotnet new console -n ProjectName.App
+You the hero have 100 and 15 attack to start but you can find weapons to increase your attack and potions to refill your health. potion give 5-50 health back
 ```
 
-### Add the project to the solution
+### How to win
 ```bash
-dotnet sln add ProjectName.App
+You need to reach the E before your health reaches 0 by making your emenies health reach 0.
 ```
-
-### Build and run
-```bash
-dotnet build
-dotnet run --project ProjectName.App
-```
-
-## Notes
-- Commit early and commit often.
-- Your repository history is part of your submission.
-- Update this README with build/run instructions specific to your project.
