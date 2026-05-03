@@ -38,7 +38,6 @@ namespace AdventureGame.Core
             Col = col;
             Health = health;
             AttackPower = attackpower;
-            Health = health;
         }
 
         public void AddWeapon(Weapon weapon)
@@ -49,9 +48,9 @@ namespace AdventureGame.Core
         public void Heal(int amount)
         {
             Health += amount;
-            if (Health > 200)
+            if (Health > 150)
             {
-                Health = 200;
+                Health = 150;
             }
         }
 
@@ -62,7 +61,7 @@ namespace AdventureGame.Core
         }
         public void TakeDamage(int amount)
         {
-            Health = amount;
+            Health -= amount;
         }
 
         public Weapon GetWeapon(Weapon weapon)

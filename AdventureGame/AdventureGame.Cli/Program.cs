@@ -13,7 +13,7 @@ namespace AdventureGame.Cli
 
             Maze maze = new Maze(rows, cols);
             var start = maze.Start;
-            Player player = new Player("Hero", start.Item1, start.Item2, health: 100, attackpower: 15);
+            Player player = new Player("Hero", start.row, start.col, health: 100, attackpower: 10);
             string introGreeting = "Welcome to the maze game. Reach the exit(E) to win. use WASD or arrow keys to move. Press Q to quit.\n";
             bool gameRunning = true;
 
@@ -22,7 +22,7 @@ namespace AdventureGame.Cli
                 Console.Clear();
                 MakeMaze(maze, player);
                 Console.WriteLine();
-                Console.WriteLine($"HP: {player.Health}    Base Attack: {player.AttackPower}       Best Weapon: {player.TrueAttack - player.AttackPower}            Total Attack Power: {player.TrueAttack}\n");
+                Console.WriteLine($"HP: {player.Health}    Base Attack: {player.AttackPower}       Best Weapon: {player.TrueAttack - player.AttackPower}          Total Attack Power: {player.TrueAttack}\n");
                 Console.WriteLine($"Inventory: {player.InvSummary()}\n");
                 Console.WriteLine();
                 if(!string.IsNullOrEmpty(introGreeting))
@@ -100,7 +100,7 @@ namespace AdventureGame.Cli
                                 int playerAttack = player.TrueAttack;//player attacks
                                 monster.TakeDamage(playerAttack);
                                 introGreeting += $"You attacked {monster.Name} for {playerAttack}dmg. {Math.Max(0, monster.Health)} hp left.\n";
-                                if (monster.IsAlive) break;
+                                if (!monster.IsAlive) break;
 
                                 int monsterAttack = monster.AttackPower;//monster attacks
                                 player.TakeDamage(monsterAttack);
@@ -177,8 +177,9 @@ namespace AdventureGame.Cli
                     {
                         Console.Write(" "); //walkable tile
                     }
-                    Console.WriteLine();
+                    
                 }
+                Console.WriteLine();
             }
         }
        

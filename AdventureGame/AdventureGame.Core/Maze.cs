@@ -67,9 +67,9 @@
 
             Start = (1, 1); //This makes the starting position in the top left corner
             Exit = (Rows - 2, Columns - 2); //this makes the exit in the opposite corner or the bottom right
-            Grid[Start.Item1, Start.Item2].IsWall = false;//makes the start not a wall
-            Grid[Exit.Item1, Exit.Item2].IsWall = false;//makes the exit not a wall
-             Grid[Exit.Item1, Exit.Item2].IsExit = true;//makes the exit a exit
+            Grid[Start.row, Start.col].IsWall = false;//makes the start not a wall
+            Grid[Exit.row, Exit.col].IsWall = false;//makes the exit not a wall
+             Grid[Exit.row, Exit.col].IsExit = true;//makes the exit a exit
 
             PlaceEntities();
             
@@ -86,7 +86,7 @@
             {
                 for (int col = 1; col < Columns - 1; col++)
                 {
-                    if (!Grid[r, col].IsWall && !(r == Start.Item1 && col == Start.Item2) && !(r == Exit.Item1 && col == Exit.row)) //check every cell if isWall then places item
+                    if (!Grid[r, col].IsWall && !(r == Start.row && col == Start.col) && !(r == Exit.row && col == Exit.row)) //check every cell if isWall then places item
                     {
                         floorCells.Add((r, col));
                     }
@@ -95,31 +95,31 @@
 
             floorCells = floorCells.OrderBy(_ => randy.Next()).ToList(); //randomizes the maze
             int total = floorCells.Count;
-            int numMonsters = Math.Max(10, 25);
-            int numWeapons = Math.Max(5, 15);
-            int numPotions = Math.Max(5, 15);
+            int numMonsters = Math.Max(3, total / 8);
+            int numWeapons = Math.Max(2, total / 16);
+            int numPotions = Math.Max(2, total / 16);
 
             int index = 0;
 
             for (int i = 0; i < numMonsters && index < floorCells.Count; i++)
             {
                 var (row, col) = floorCells[index];
-                int choice = randy.Next(3);
+                int choice = randy.Next(4);
                 Monster m;
 
                 switch (choice)
                 {
                     case 0:
-                        m = new Monster($"Rat ", 10, 5);
+                        m = new Monster($"Rat ", 30, 5);
                         break;
                     case 1:
-                        m = new Monster($"Goblin ", 15, 5);
+                        m = new Monster($"Goblin ", 35, 5);
                         break; 
                     case 2:
-                        m = new Monster($"Wizard ", 20, 20);
+                        m = new Monster($"Wizard ", 40, 20);
                         break;
                     case 3:
-                        m = new Monster($"Knight ", 25, 15);
+                        m = new Monster($"Knight ", 50, 15);
                         break;
                     default:
                         m = new Monster($"Average Joe ", 15, 10);
@@ -130,7 +130,7 @@
             }
             //weapons
             
-            for (int i = 0; i < numMonsters && index < floorCells.Count; i++, index++)
+            for (int i = 0; i < numWeapons && index < floorCells.Count; i++, index++)
             {
                 var (row, col) = floorCells[index] ;
                 int choice = randy.Next(4);
@@ -160,7 +160,7 @@
             for (int k = 0; k < numPotions && index < floorCells.Count; k++, index++)
             {
                 var (row, col) = floorCells[index];
-                int heal = randy.Next(5 - 50);
+                int heal = 20;
                 Grid[row, col].Item = new Potion($"Potion (+{heal})", heal);
             }
 
