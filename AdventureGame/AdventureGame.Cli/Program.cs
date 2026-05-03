@@ -180,6 +180,7 @@ namespace AdventureGame.Cli
                     
                 }
                 Console.WriteLine();
+
             }
         }
        
